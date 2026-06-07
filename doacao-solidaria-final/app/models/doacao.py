@@ -1,8 +1,3 @@
-"""
-Model de Doação.
-Representa cada item doado: categoria, quantidade, doador e status de entrega.
-"""
-
 from datetime import datetime
 from app import db
 
@@ -16,10 +11,9 @@ class Doacao(db.Model):
     quantidade     = db.Column(db.Integer,     nullable=False)
     descricao      = db.Column(db.Text,        default='')
     data_doacao    = db.Column(db.DateTime,    default=datetime.utcnow)
-    status         = db.Column(db.String(20),  default='pendente')  # pendente | entregue | cancelado
+    status         = db.Column(db.String(20),  default='pendente')  
     criado_em      = db.Column(db.DateTime,    default=datetime.utcnow)
 
-    # Chaves estrangeiras
     beneficiario_id = db.Column(db.Integer, db.ForeignKey('beneficiarios.id'), nullable=True)
     usuario_id      = db.Column(db.Integer, db.ForeignKey('usuarios.id'),      nullable=False)
 
