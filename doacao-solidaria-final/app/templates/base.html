@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
-    /* ── Tokens ─────────────────────────────────────────────────── */
+    
     :root {
       --verde:        #1a7a4a;
       --verde-hover:  #155e38;
@@ -26,11 +26,9 @@
       --raio:         10px;
     }
 
-    /* ── Reset ──────────────────────────────────────────────────── */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Sora', sans-serif; background: var(--fundo); color: var(--texto); min-height: 100vh; display: flex; font-size: 15px; }
 
-    /* ── Sidebar ─────────────────────────────────────────────────── */
     .sidebar {
       width: 230px; background: var(--verde);
       display: flex; flex-direction: column;
@@ -66,7 +64,6 @@
     .sidebar-footer a.sair { color: rgba(255,255,255,.6); font-size: .78rem; text-decoration: none; }
     .sidebar-footer a.sair:hover { color: #fff; }
 
-    /* ── Main ────────────────────────────────────────────────────── */
     .main { margin-left: 230px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
 
     .topbar {
@@ -81,17 +78,14 @@
 
     .content { padding: 28px 30px; flex: 1; }
 
-    /* ── Alertas flash ───────────────────────────────────────────── */
     .flash { padding: 11px 16px; border-radius: var(--raio); font-size: .85rem; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
     .flash-success { background: #d1f2eb; color: #1a6b40; border: 1px solid #a9dfbf; }
     .flash-danger  { background: #fde8e8; color: #943126; border: 1px solid #f5c6c6; }
     .flash-info    { background: #d6eaf8; color: #1a4d70; border: 1px solid #aed6f1; }
     .flash-warning { background: #fef9e7; color: #7d6608; border: 1px solid #f9e79f; }
 
-    /* ── Cards ───────────────────────────────────────────────────── */
     .card { background: var(--card); border: 1px solid var(--borda); border-radius: var(--raio); padding: 22px 24px; box-shadow: var(--sombra); }
 
-    /* ── Stat cards ──────────────────────────────────────────────── */
     .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(165px, 1fr)); gap: 14px; margin-bottom: 24px; }
     .stat { background: var(--card); border: 1px solid var(--borda); border-radius: var(--raio); padding: 18px 20px; box-shadow: var(--sombra); }
     .stat .lbl { font-size: .7rem; text-transform: uppercase; letter-spacing: .8px; font-weight: 600; color: var(--cinza); }
@@ -101,7 +95,6 @@
     .stat.azul    .val { color: var(--azul); }
     .stat.vermelho .val { color: var(--vermelho); }
 
-    /* ── Tabelas ─────────────────────────────────────────────────── */
     .table-wrap { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: .86rem; }
     thead th {
@@ -115,7 +108,6 @@
     .mono { font-family: 'DM Mono', monospace; font-size: .82rem; color: var(--cinza); }
     .muted { color: var(--cinza); }
 
-    /* ── Badges ──────────────────────────────────────────────────── */
     .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; white-space: nowrap; }
     .badge-pendente  { background: #fef3cd; color: #7d5a00; }
     .badge-entregue  { background: #d1f2eb; color: #1a6b40; }
@@ -123,7 +115,6 @@
     .badge-ativo     { background: #d1f2eb; color: #1a6b40; }
     .badge-inativo   { background: #f0f0f0; color: #666; }
 
-    /* ── Botões ──────────────────────────────────────────────────── */
     .btn {
       display: inline-flex; align-items: center; gap: 6px;
       padding: 8px 18px; border-radius: 8px; font-size: .85rem;
@@ -139,7 +130,6 @@
     .btn-danger:hover { opacity: .85; }
     .btn-sm { padding: 5px 12px; font-size: .78rem; }
 
-    /* ── Formulários ─────────────────────────────────────────────── */
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .form-group { display: flex; flex-direction: column; gap: 5px; }
     .form-group label { font-size: .8rem; font-weight: 600; color: var(--texto); }
@@ -156,7 +146,6 @@
     .form-group.full { grid-column: 1 / -1; }
     .form-hint { font-size: .74rem; color: var(--cinza); margin-top: 2px; }
 
-    /* ── Filtros ─────────────────────────────────────────────────── */
     .filtros { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 18px; }
     .filtros select,
     .filtros input {
@@ -165,26 +154,21 @@
       background: #fff; color: var(--texto);
     }
 
-    /* ── Section header ──────────────────────────────────────────── */
     .sec-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
     .sec-header h3 { font-size: .95rem; font-weight: 700; }
 
-    /* ── Ações ───────────────────────────────────────────────────── */
     .acoes { display: flex; gap: 6px; }
 
-    /* ── Empty state ─────────────────────────────────────────────── */
     .empty { text-align: center; padding: 48px 20px; color: var(--cinza); }
     .empty .ico { font-size: 2.5rem; margin-bottom: 10px; }
     .empty p { font-size: .88rem; }
 
-    /* ── Grid layout ─────────────────────────────────────────────── */
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
   </style>
   {% block extra_css %}{% endblock %}
 </head>
 <body>
 
-<!-- ── Sidebar ───────────────────────────────────────────────────── -->
 <aside class="sidebar">
   <div class="sidebar-logo">
     <span class="emoji">🤝</span>
@@ -224,7 +208,6 @@
   {% endif %}
 </aside>
 
-<!-- ── Main ─────────────────────────────────────────────────────── -->
 <div class="main">
   <header class="topbar">
     <div class="topbar-left">
@@ -235,7 +218,7 @@
   </header>
 
   <div class="content">
-    <!-- Flash messages -->
+    
     {% with msgs = get_flashed_messages(with_categories=true) %}
       {% for cat, msg in msgs %}
         <div class="flash flash-{{ cat }}">{{ msg }}</div>
