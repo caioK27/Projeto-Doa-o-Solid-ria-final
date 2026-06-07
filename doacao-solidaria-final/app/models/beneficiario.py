@@ -1,8 +1,3 @@
-"""
-Model de Beneficiário.
-Representa famílias ou indivíduos em situação de vulnerabilidade social.
-"""
-
 from datetime import datetime
 from app import db
 
@@ -18,7 +13,6 @@ class Beneficiario(db.Model):
     ativo       = db.Column(db.Boolean,     default=True)
     criado_em   = db.Column(db.DateTime,    default=datetime.utcnow)
 
-    # Relacionamentos
     doacoes = db.relationship('Doacao', backref='beneficiario', lazy=True)
 
     @property
