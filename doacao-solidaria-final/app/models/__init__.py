@@ -1,4 +1,3 @@
-"""Models do sistema de doações."""
 from app.models.usuario import Usuario
 from app.models.doacao import Doacao
 from app.models.beneficiario import Beneficiario
