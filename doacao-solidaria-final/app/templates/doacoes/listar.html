@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}Doações — Doação Solidária{% endblock %}
+{% block page_title %}Doações{% endblock %}
+{% block breadcrumb %}Gerenciar doações recebidas{% endblock %}
+{% block topbar_actions %}
+  <a href="{{ url_for('doacoes.nova') }}" class="btn btn-primary">+ Nova Doação</a>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+
+  <!-- Filtros -->
+  <form method="GET" class="filtros">
+    <select name="status" onchange="this.form.submit()">
+      <option value="">🔍 Todos os status</option>
+      {% for s in status_opcoes %}
+        <option value="{{ s }}" {{ 'selected' if request.args.get('status') == s }}>
+          {{ s|capitalize }}
+        </option>
+      {% endfor %}
+    </select>
+
+    <select name="categoria" onchange="this.form.submit()">
+      <option value="">📦 Todas as categorias</option>
+      {% for c in categorias %}
+        <option value="{{ c }}" {{ 'selected' if request.args.get('categoria') == c }}>
+          {{ c }}
+        </option>
+      {% endfor %}
+    </select>
+
+    {% if request.args.get('status') or request.args.get('categoria') %}
+      <a href="{{ url_for('doacoes.listar') }}" class="btn btn-secondary btn-sm">✕ Limpar filtros</a>
+    {% endif %}
+
+    <span class="muted" style="font-size:.78rem; margin-left:auto;">
+      {{ doacoes|length }} registro{{ 's' if doacoes|length != 1 }} encontrado{{ 's' if doacoes|length != 1 }}
+    </span>
+  </form>
+
+  <!-- Tabela -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Doador</th>
+          <th>Categoria</th>
+          <th>Qtd.</th>
+          <th>Beneficiário</th>
+          <th>Status</th>
+          <th>Data</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for d in doacoes %}
+        <tr>
+          <td class="mono">{{ d.id }}</td>
+          <td><strong>{{ d.doador }}</strong></td>
+          <td>{{ d.categoria }}</td>
+          <td class="mono">{{ d.quantidade }}</td>
+          {# FIX #2: parênteses garantem que | safe aplica ao resultado todo da expressão #}
+          <td>{{ (d.beneficiario.nome if d.beneficiario else '<span class="muted">—</span>') | safe }}</td>
+          <td><span class="badge badge-{{ d.status }}">{{ d.status }}</span></td>
+          <td class="muted" style="font-size:.8rem; white-space:nowrap;">
+            {{ d.data_doacao.strftime('%d/%m/%Y') if d.data_doacao else '—' }}
+          </td>
+          <td>
+            <div class="acoes">
+              <a href="{{ url_for('doacoes.editar', id=d.id) }}"
+                 class="btn btn-secondary btn-sm">✏️ Editar</a>
+              <form method="POST" action="{{ url_for('doacoes.excluir', id=d.id) }}"
+                    onsubmit="return confirm('Remover esta doação? Esta ação não pode ser desfeita.')">
+                <button type="submit" class="btn btn-danger btn-sm">✕</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="8">
+            <div class="empty">
+              <div class="ico">📭</div>
+              <p>Nenhuma doação encontrada para os filtros selecionados.</p>
+              <br />
+              <a href="{{ url_for('doacoes.nova') }}" class="btn btn-primary btn-sm">+ Registrar primeira doação</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+{% endblock %}

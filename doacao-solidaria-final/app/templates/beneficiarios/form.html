@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% set editando = beneficiario is defined and beneficiario %}
+{% block title %}{{ 'Editar' if editando else 'Novo' }} Beneficiário — Doação Solidária{% endblock %}
+{% block page_title %}{{ 'Editar' if editando else 'Novo' }} Beneficiário{% endblock %}
+{% block breadcrumb %}
+  <a href="{{ url_for('beneficiarios.listar') }}">Beneficiários</a> /
+  {{ 'Editar #' ~ beneficiario.id if editando else 'Cadastrar novo' }}
+{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 620px;">
+
+  <form method="POST">
+    <div class="form-grid">
+
+      <!-- Nome -->
+      <div class="form-group full">
+        <label for="nome">Nome completo / Família *</label>
+        <input type="text" id="nome" name="nome"
+               value="{{ beneficiario.nome if editando else '' }}"
+               placeholder="Ex: Família Silva ou Maria Souza" required />
+      </div>
+
+      <!-- Região -->
+      <div class="form-group">
+        <label for="regiao">Região / Bairro</label>
+        <input type="text" id="regiao" name="regiao"
+               value="{{ beneficiario.regiao if editando else '' }}"
+               placeholder="Ex: Zona Norte, Periferia Leste" />
+      </div>
+
+      <!-- Membros -->
+      <div class="form-group">
+        <label for="membros">Número de membros</label>
+        <input type="number" id="membros" name="membros"
+               value="{{ beneficiario.membros if editando else 1 }}"
+               min="1" max="30" />
+        <span class="form-hint">Quantas pessoas na família / grupo</span>
+      </div>
+
+      <!-- Necessidades -->
+      <div class="form-group full">
+        <label for="necessidade">Necessidades</label>
+        <input type="text" id="necessidade" name="necessidade"
+               value="{{ beneficiario.necessidade if editando else '' }}"
+               placeholder="Ex: Alimentos, Roupas infantis, Medicamentos" />
+        <span class="form-hint">Descreva o que a família mais precisa</span>
+      </div>
+
+      <!-- Status (somente ao editar) -->
+      {% if editando %}
+      <div class="form-group full">
+        <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-weight:600;">
+          <input type="checkbox" name="ativo"
+                 {{ 'checked' if beneficiario.ativo }}
+                 style="width:16px; height:16px;" />
+          Beneficiário ativo (recebe doações)
+        </label>
+        <span class="form-hint">Desmarque para desativar sem excluir o cadastro</span>
+      </div>
+      {% endif %}
+
+    </div><!-- /form-grid -->
+
+    <div style="display:flex; gap:12px; margin-top:26px;">
+      <button type="submit" class="btn btn-primary">
+        {{ '💾 Salvar alterações' if editando else '✓ Cadastrar Beneficiário' }}
+      </button>
+      <a href="{{ url_for('beneficiarios.listar') }}" class="btn btn-secondary">Cancelar</a>
+    </div>
+  </form>
+
+</div>
+{% endblock %}

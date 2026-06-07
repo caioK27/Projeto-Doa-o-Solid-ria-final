@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — Doação Solidária</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Sora', sans-serif;
+      min-height: 100vh; background: #f2f5f2;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .wrapper {
+      display: grid; grid-template-columns: 1fr 1fr;
+      width: min(880px, 96vw); border-radius: 16px;
+      overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,.14);
+    }
+
+    /* ── Painel esquerdo ── */
+    .left {
+      background: #1a7a4a; padding: 52px 44px;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .left .icon { font-size: 52px; margin-bottom: 20px; }
+    .left h1 { color: #fff; font-size: 1.65rem; font-weight: 700; line-height: 1.25; margin-bottom: 14px; }
+    .left p  { color: rgba(255,255,255,.72); font-size: .9rem; line-height: 1.65; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+    .chip {
+      background: rgba(255,255,255,.15); color: rgba(255,255,255,.9);
+      border-radius: 20px; padding: 5px 14px; font-size: .74rem; font-weight: 600;
+    }
+    .features { list-style: none; margin-top: 28px; display: flex; flex-direction: column; gap: 10px; }
+    .features li { color: rgba(255,255,255,.8); font-size: .84rem; display: flex; align-items: center; gap: 9px; }
+    .features li::before { content: '✓'; color: #7fe0a8; font-weight: 700; font-size: .9rem; }
+
+    /* ── Painel direito ── */
+    .right { background: #fff; padding: 52px 44px; }
+    .right h2 { font-size: 1.3rem; font-weight: 700; color: #1a2b1a; }
+    .right .sub { font-size: .84rem; color: #6b7c6b; margin-top: 5px; margin-bottom: 32px; }
+
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-size: .8rem; font-weight: 600; color: #1a2b1a; margin-bottom: 6px; }
+    .form-group input {
+      width: 100%; padding: 11px 14px; border: 1.5px solid #d5e8d5;
+      border-radius: 8px; font-size: .9rem; font-family: 'Sora', sans-serif;
+      transition: border-color .15s;
+    }
+    .form-group input:focus { outline: none; border-color: #27ae60; }
+
+    .btn-login {
+      width: 100%; padding: 13px; background: #1a7a4a; color: #fff;
+      border: none; border-radius: 8px; font-size: .95rem; font-weight: 700;
+      font-family: 'Sora', sans-serif; cursor: pointer; transition: background .15s;
+      margin-top: 6px;
+    }
+    .btn-login:hover { background: #155e38; }
+
+    .demo-box {
+      margin-top: 24px; padding: 14px 16px; background: #f2f5f2;
+      border-radius: 8px; font-size: .78rem; color: #6b7c6b; line-height: 1.7;
+      border-left: 3px solid #1a7a4a;
+    }
+    .demo-box strong { color: #1a7a4a; }
+
+    .flash { padding: 10px 14px; border-radius: 8px; font-size: .82rem; margin-bottom: 16px; }
+    .flash-danger { background: #fde8e8; color: #943126; border: 1px solid #f5c6c6; }
+    .flash-info   { background: #d6eaf8; color: #1a4d70; border: 1px solid #aed6f1; }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- Esquerda -->
+  <div class="left">
+    <div class="icon">🤝</div>
+    <h1>Sistema de Gestão de Doações</h1>
+    <p>Conectando doadores e comunidades vulneráveis de forma eficiente, organizada e transparente.</p>
+    <ul class="features">
+      <li>Registro e rastreamento de doações</li>
+      <li>Cadastro de famílias beneficiárias</li>
+      <li>Relatórios e métricas em tempo real</li>
+      <li>Gestão multi-voluntário</li>
+    </ul>
+    <div class="chips">
+      <span class="chip">📦 Alimentos</span>
+      <span class="chip">👕 Roupas</span>
+      <span class="chip">💊 Medicamentos</span>
+    </div>
+  </div>
+
+  <!-- Direita -->
+  <div class="right">
+    <h2>Bem-vindo de volta</h2>
+    <p class="sub">Entre com suas credenciais para acessar o sistema.</p>
+
+    {% with msgs = get_flashed_messages(with_categories=true) %}
+      {% for cat, msg in msgs %}
+        <div class="flash flash-{{ cat }}">{{ msg }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('auth.login') }}">
+      <div class="form-group">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" name="email"
+               placeholder="seu@email.org" autocomplete="email" required />
+      </div>
+      <div class="form-group">
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" name="senha"
+               placeholder="••••••••" autocomplete="current-password" required />
+      </div>
+      <button type="submit" class="btn-login">Entrar no Sistema →</button>
+    </form>
+
+    <div class="demo-box">
+      <strong>Acesso de demonstração</strong><br />
+      Admin: <strong>admin@solidaria.org</strong> / <strong>admin123</strong><br />
+      Voluntário: <strong>maria@solidaria.org</strong> / <strong>senha123</strong>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

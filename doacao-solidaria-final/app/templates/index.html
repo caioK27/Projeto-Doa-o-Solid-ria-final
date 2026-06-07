@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Doação Solidária{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block breadcrumb %}Visão geral do sistema{% endblock %}
+{% block topbar_actions %}
+  <a href="{{ url_for('doacoes.nova') }}" class="btn btn-primary">+ Nova Doação</a>
+{% endblock %}
+
+{% block content %}
+
+<!-- ── Stat cards ─────────────────────────────────────────────── -->
+<div class="stats-grid">
+  <div class="stat">
+    <div class="lbl">Total de Doações</div>
+    <div class="val">{{ total_doacoes }}</div>
+    <div class="sub">registradas no sistema</div>
+  </div>
+  <div class="stat laranja">
+    <div class="lbl">Pendentes</div>
+    <div class="val">{{ pendentes }}</div>
+    <div class="sub">aguardando entrega</div>
+  </div>
+  <div class="stat">
+    <div class="lbl">Entregues</div>
+    <div class="val">{{ entregues }}</div>
+    <div class="sub">concluídas com sucesso</div>
+  </div>
+  {% if cancelados > 0 %}
+  <div class="stat vermelho">
+    <div class="lbl">Canceladas</div>
+    <div class="val">{{ cancelados }}</div>
+    <div class="sub">não realizadas</div>
+  </div>
+  {% endif %}
+  <div class="stat azul">
+    <div class="lbl">Beneficiários</div>
+    <div class="val">{{ total_beneficiarios }}</div>
+    <div class="sub">famílias cadastradas e ativas</div>
+  </div>
+  <div class="stat">
+    <div class="lbl">Voluntários</div>
+    <div class="val">{{ total_voluntarios }}</div>
+    <div class="sub">no sistema</div>
+  </div>
+</div>
+
+<!-- ── Grid de cards ──────────────────────────────────────────── -->
+<div class="grid-2">
+
+  <!-- Categoria -->
+  <div class="card">
+    <div class="sec-header">
+      <h3>📦 Doações por Categoria</h3>
+      <a href="{{ url_for('relatorios.index') }}" class="btn btn-secondary btn-sm">Ver tudo</a>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Categoria</th><th>Total</th><th>Proporção</th></tr>
+        </thead>
+        <tbody>
+          {% set total = total_doacoes or 1 %}
+          {% for cat, qtd in por_categoria %}
+          <tr>
+            <td><strong>{{ cat }}</strong></td>
+            <td class="mono">{{ qtd }}</td>
+            <td>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <div style="flex:1; background:#e8f5ee; border-radius:4px; height:6px; overflow:hidden;">
+                  <div style="height:100%; background:#1a7a4a; width:{{ (qtd/total*100)|round|int }}%;"></div>
+                </div>
+                <span style="font-size:.74rem; color:#6b7c6b; white-space:nowrap;">{{ (qtd/total*100)|round|int }}%</span>
+              </div>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="3" class="muted" style="text-align:center; padding:32px;">Nenhuma doação ainda.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Últimas doações -->
+  <div class="card">
+    <div class="sec-header">
+      <h3>🕐 Últimas Doações</h3>
+      <a href="{{ url_for('doacoes.listar') }}" class="btn btn-secondary btn-sm">Ver todas</a>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Doador</th><th>Categoria</th><th>Qtd.</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          {% for d in ultimas %}
+          <tr>
+            <td><strong>{{ d.doador }}</strong></td>
+            <td>{{ d.categoria }}</td>
+            <td class="mono">{{ d.quantidade }}</td>
+            <td><span class="badge badge-{{ d.status }}">{{ d.status }}</span></td>
+          </tr>
+          {% else %}
+          <tr><td colspan="4" class="muted" style="text-align:center; padding:32px;">Nenhuma doação ainda.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

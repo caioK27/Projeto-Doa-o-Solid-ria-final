@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Beneficiários — Doação Solidária{% endblock %}
+{% block page_title %}Beneficiários{% endblock %}
+{% block breadcrumb %}Famílias e indivíduos atendidos pelo programa{% endblock %}
+{% block topbar_actions %}
+  <a href="{{ url_for('beneficiarios.novo') }}" class="btn btn-primary">+ Novo Beneficiário</a>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+
+  <!-- Filtro ativo/inativo -->
+  <form method="GET" class="filtros">
+    <select name="ativos" onchange="this.form.submit()">
+      <option value="1" {{ 'selected' if apenas_ativos == '1' }}>✅ Somente ativos</option>
+      <option value="0" {{ 'selected' if apenas_ativos == '0' }}>👁️ Todos (incluindo inativos)</option>
+    </select>
+    <span class="muted" style="font-size:.78rem; margin-left:auto;">
+      {{ beneficiarios|length }} beneficiário{{ 's' if beneficiarios|length != 1 }}
+    </span>
+  </form>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Nome / Família</th>
+          <th>Região</th>
+          <th>Membros</th>
+          <th>Necessidades</th>
+          <th>Doações recebidas</th>
+          <th>Entregues</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for b in beneficiarios %}
+        <tr>
+          <td class="mono">{{ b.id }}</td>
+          <td><strong>{{ b.nome }}</strong></td>
+          {# FIX #2: parênteses garantem que | safe aplica ao resultado todo #}
+          <td>{{ (b.regiao if b.regiao else '<span class="muted">—</span>') | safe }}</td>
+          <td class="mono">{{ b.membros }}</td>
+          <td style="font-size:.82rem;">{{ (b.necessidade if b.necessidade else '<span class="muted">—</span>') | safe }}</td>
+          <td class="mono">{{ b.total_doacoes }}</td>
+          <td class="mono">{{ b.doacoes_entregues }}</td>
+          <td>
+            {% if b.ativo %}
+              <span class="badge badge-ativo">Ativo</span>
+            {% else %}
+              <span class="badge badge-inativo">Inativo</span>
+            {% endif %}
+          </td>
+          <td>
+            <a href="{{ url_for('beneficiarios.editar', id=b.id) }}"
+               class="btn btn-secondary btn-sm">✏️ Editar</a>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="9">
+            <div class="empty">
+              <div class="ico">👥</div>
+              <p>Nenhum beneficiário cadastrado ainda.</p>
+              <br />
+              <a href="{{ url_for('beneficiarios.novo') }}" class="btn btn-primary btn-sm">
+                + Cadastrar primeiro beneficiário
+              </a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+{% endblock %}

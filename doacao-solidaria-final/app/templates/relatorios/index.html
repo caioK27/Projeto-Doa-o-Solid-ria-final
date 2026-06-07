@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+{% block title %}Relatórios — Doação Solidária{% endblock %}
+{% block page_title %}Relatórios{% endblock %}
+{% block breadcrumb %}Análise e métricas do programa de doações{% endblock %}
+
+{% block extra_css %}
+<style>
+  .progress-bar  { background: #e8f5ee; border-radius: 4px; height: 8px; overflow: hidden; flex: 1; }
+  .progress-fill { height: 100%; background: #1a7a4a; border-radius: 4px; }
+  .highlight-box {
+    text-align: center; padding: 36px 20px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 6px;
+  }
+  .highlight-box .big-num   { font-size: 3.2rem; font-weight: 700; font-family: 'DM Mono', monospace; color: #1a7a4a; line-height: 1; }
+  .highlight-box .big-label { font-weight: 600; color: #1a2b1a; font-size: .95rem; }
+  .highlight-box .big-sub   { color: #6b7c6b; font-size: .82rem; }
+  .api-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: .8rem; color: #1a7a4a; text-decoration: none;
+    border: 1.5px solid #d5e8d5; border-radius: 6px;
+    padding: 4px 12px; transition: background .15s;
+  }
+  .api-link:hover { background: #e8f5ee; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ── Linha 1 ──────────────────────────────────────────────────── -->
+<div class="grid-2" style="margin-bottom: 20px;">
+
+  <!-- Por categoria -->
+  <div class="card">
+    <div class="sec-header">
+      <h3>📦 Doações por Categoria</h3>
+      <a href="{{ url_for('relatorios.api_categorias') }}" target="_blank" class="api-link">🔌 JSON</a>
+    </div>
+
+    {# FIX #3: substituído sum(attribute='1') por namespace + loop explícito #}
+    {% set ns = namespace(total_cat=0) %}
+    {% for cat, qtd in por_categoria %}
+      {% set ns.total_cat = ns.total_cat + qtd %}
+    {% endfor %}
+    {% set total_cat = ns.total_cat if ns.total_cat > 0 else 1 %}
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Categoria</th><th>Total</th><th>Proporção</th></tr></thead>
+        <tbody>
+          {% for cat, total in por_categoria %}
+          <tr>
+            <td><strong>{{ cat }}</strong></td>
+            <td class="mono">{{ total }}</td>
+            <td style="min-width:140px;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width:{{ (total / total_cat * 100) | round | int }}%;"></div>
+                </div>
+                <span style="font-size:.74rem; color:#6b7c6b; white-space:nowrap;">
+                  {{ (total / total_cat * 100) | round | int }}%
+                </span>
+              </div>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="3" class="muted" style="text-align:center; padding:24px;">Sem dados.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Por status -->
+  <div class="card">
+    <div class="sec-header">
+      <h3>📊 Status das Doações</h3>
+      <a href="{{ url_for('relatorios.api_resumo') }}" target="_blank" class="api-link">🔌 JSON</a>
+    </div>
+
+    {# FIX #3: namespace + loop explícito para total de status #}
+    {% set ns2 = namespace(total_status=0) %}
+    {% for status, qtd in por_status %}
+      {% set ns2.total_status = ns2.total_status + qtd %}
+    {% endfor %}
+    {% set total_status = ns2.total_status if ns2.total_status > 0 else 1 %}
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Status</th><th>Total</th><th>Proporção</th></tr></thead>
+        <tbody>
+          {% for status, total in por_status %}
+          <tr>
+            <td><span class="badge badge-{{ status }}">{{ status }}</span></td>
+            <td class="mono">{{ total }}</td>
+            <td style="min-width:140px;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <div class="progress-bar">
+                  <div class="progress-fill" style="
+                    width:{{ (total / total_status * 100) | round | int }}%;
+                    background: {{ '#1a7a4a' if status == 'entregue' else ('#e67e22' if status == 'pendente' else '#e74c3c') }};
+                  "></div>
+                </div>
+                <span style="font-size:.74rem; color:#6b7c6b; white-space:nowrap;">
+                  {{ (total / total_status * 100) | round | int }}%
+                </span>
+              </div>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="3" class="muted" style="text-align:center; padding:24px;">Sem dados.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Linha 2 ──────────────────────────────────────────────────── -->
+<div class="grid-2">
+
+  <!-- Top beneficiários -->
+  <div class="card">
+    <div class="sec-header">
+      <h3>🏆 Top Beneficiários Atendidos</h3>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Posição</th><th>Beneficiário</th><th>Doações recebidas</th></tr></thead>
+        <tbody>
+          {% for nome, total in top_beneficiarios %}
+          <tr>
+            <td class="mono" style="color:#1a7a4a; font-weight:700;">{{ '#' ~ loop.index }}</td>
+            <td><strong>{{ nome }}</strong></td>
+            <td class="mono">{{ total }}</td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="3" class="muted" style="text-align:center; padding:24px;">
+              Nenhuma doação atribuída ainda.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Destaque: últimos 30 dias + por mês -->
+  <div style="display:flex; flex-direction:column; gap:20px;">
+
+    <div class="card highlight-box">
+      <div style="font-size:2.5rem;">📅</div>
+      <div class="big-num">{{ total_recentes }}</div>
+      <div class="big-label">Doações nos últimos 30 dias</div>
+      <div class="big-sub">Atividade recente do programa</div>
+    </div>
+
+    {% if por_mes_lista %}
+    <div class="card">
+      {# FIX #4: por_mes_lista já vem ordenado cronologicamente do backend #}
+      <h3 style="font-size:.9rem; font-weight:700; margin-bottom:14px;">📆 Atividade por Mês</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Mês/Ano</th><th>Doações</th></tr></thead>
+          <tbody>
+            {% for mes, qtd in por_mes_lista %}
+            <tr>
+              <td>{{ mes }}</td>
+              <td class="mono"><strong>{{ qtd }}</strong></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+
+</div>
+{% endblock %}

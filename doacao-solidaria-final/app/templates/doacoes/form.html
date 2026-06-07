@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% set editando = doacao is defined and doacao %}
+{% block title %}{{ 'Editar' if editando else 'Nova' }} Doação — Doação Solidária{% endblock %}
+{% block page_title %}{{ 'Editar' if editando else 'Nova' }} Doação{% endblock %}
+{% block breadcrumb %}
+  <a href="{{ url_for('doacoes.listar') }}">Doações</a> /
+  {{ 'Editar #' ~ doacao.id if editando else 'Registrar nova' }}
+{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 680px;">
+
+  <form method="POST">
+    <div class="form-grid">
+
+      <!-- Doador -->
+      <div class="form-group">
+        <label for="doador">Doador *</label>
+        <input type="text" id="doador" name="doador"
+               value="{{ doacao.doador if editando else '' }}"
+               placeholder="Nome da pessoa ou empresa" required />
+        <span class="form-hint">Quem está fazendo a doação</span>
+      </div>
+
+      <!-- Categoria -->
+      <div class="form-group">
+        <label for="categoria">Categoria *</label>
+        <select id="categoria" name="categoria" required>
+          {% for c in categorias %}
+            <option value="{{ c }}"
+              {{ 'selected' if editando and doacao.categoria == c }}>
+              {{ c }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Quantidade -->
+      <div class="form-group">
+        <label for="quantidade">Quantidade *</label>
+        <input type="number" id="quantidade" name="quantidade"
+               value="{{ doacao.quantidade if editando else '' }}"
+               min="1" placeholder="Ex: 10" required />
+        <span class="form-hint">Número de unidades / peças / kg</span>
+      </div>
+
+      <!-- Beneficiário -->
+      <div class="form-group">
+        <label for="beneficiario_id">Beneficiário</label>
+        <select id="beneficiario_id" name="beneficiario_id">
+          <option value="">— Não atribuído ainda —</option>
+          {% for b in beneficiarios %}
+            <option value="{{ b.id }}"
+              {{ 'selected' if editando and doacao.beneficiario_id == b.id }}>
+              {{ b.nome }} ({{ b.regiao }})
+            </option>
+          {% endfor %}
+        </select>
+        <span class="form-hint">Família ou pessoa que receberá a doação</span>
+      </div>
+
+      <!-- Status (somente ao editar) -->
+      {% if editando %}
+      <div class="form-group">
+        <label for="status">Status</label>
+        <select id="status" name="status">
+          {% for s in status_opcoes %}
+            <option value="{{ s }}" {{ 'selected' if doacao.status == s }}>
+              {{ s|capitalize }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div></div>
+      {% endif %}
+
+      <!-- Descrição -->
+      <div class="form-group full">
+        <label for="descricao">Descrição</label>
+        <textarea id="descricao" name="descricao" rows="3"
+                  placeholder="Detalhes adicionais sobre a doação...">{{ doacao.descricao if editando else '' }}</textarea>
+      </div>
+
+    </div><!-- /form-grid -->
+
+    <div style="display: flex; gap: 12px; margin-top: 26px;">
+      <button type="submit" class="btn btn-primary">
+        {{ '💾 Salvar alterações' if editando else '✓ Registrar Doação' }}
+      </button>
+      <a href="{{ url_for('doacoes.listar') }}" class="btn btn-secondary">Cancelar</a>
+    </div>
+  </form>
+
+</div>
+{% endblock %}
