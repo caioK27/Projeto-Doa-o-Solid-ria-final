@@ -13,7 +13,6 @@
   <form method="POST">
     <div class="form-grid">
 
-      <!-- Doador -->
       <div class="form-group">
         <label for="doador">Doador *</label>
         <input type="text" id="doador" name="doador"
@@ -22,7 +21,6 @@
         <span class="form-hint">Quem está fazendo a doação</span>
       </div>
 
-      <!-- Categoria -->
       <div class="form-group">
         <label for="categoria">Categoria *</label>
         <select id="categoria" name="categoria" required>
@@ -35,7 +33,6 @@
         </select>
       </div>
 
-      <!-- Quantidade -->
       <div class="form-group">
         <label for="quantidade">Quantidade *</label>
         <input type="number" id="quantidade" name="quantidade"
@@ -44,7 +41,6 @@
         <span class="form-hint">Número de unidades / peças / kg</span>
       </div>
 
-      <!-- Beneficiário -->
       <div class="form-group">
         <label for="beneficiario_id">Beneficiário</label>
         <select id="beneficiario_id" name="beneficiario_id">
@@ -59,7 +55,6 @@
         <span class="form-hint">Família ou pessoa que receberá a doação</span>
       </div>
 
-      <!-- Status (somente ao editar) -->
       {% if editando %}
       <div class="form-group">
         <label for="status">Status</label>
@@ -74,14 +69,13 @@
       <div></div>
       {% endif %}
 
-      <!-- Descrição -->
       <div class="form-group full">
         <label for="descricao">Descrição</label>
         <textarea id="descricao" name="descricao" rows="3"
                   placeholder="Detalhes adicionais sobre a doação...">{{ doacao.descricao if editando else '' }}</textarea>
       </div>
 
-    </div><!-- /form-grid -->
+    </div>
 
     <div style="display: flex; gap: 12px; margin-top: 26px;">
       <button type="submit" class="btn btn-primary">
