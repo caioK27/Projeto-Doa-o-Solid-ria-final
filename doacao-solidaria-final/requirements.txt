@@ -8,6 +8,4 @@ click==8.1.7
 itsdangerous==2.2.0
 MarkupSafe==2.1.5
 
-# ── Testes ────────────────────────────────────────────────────────
-# FIX #13: pytest-flask removido — não era utilizado pelas fixtures
 pytest==8.2.2
