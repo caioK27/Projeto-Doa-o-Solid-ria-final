@@ -9,7 +9,6 @@
 {% block content %}
 <div class="card">
 
-  <!-- Filtro ativo/inativo -->
   <form method="GET" class="filtros">
     <select name="ativos" onchange="this.form.submit()">
       <option value="1" {{ 'selected' if apenas_ativos == '1' }}>✅ Somente ativos</option>
