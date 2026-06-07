@@ -13,7 +13,6 @@
   <form method="POST">
     <div class="form-grid">
 
-      <!-- Nome -->
       <div class="form-group full">
         <label for="nome">Nome completo / Família *</label>
         <input type="text" id="nome" name="nome"
@@ -21,7 +20,6 @@
                placeholder="Ex: Família Silva ou Maria Souza" required />
       </div>
 
-      <!-- Região -->
       <div class="form-group">
         <label for="regiao">Região / Bairro</label>
         <input type="text" id="regiao" name="regiao"
@@ -29,7 +27,6 @@
                placeholder="Ex: Zona Norte, Periferia Leste" />
       </div>
 
-      <!-- Membros -->
       <div class="form-group">
         <label for="membros">Número de membros</label>
         <input type="number" id="membros" name="membros"
@@ -38,7 +35,6 @@
         <span class="form-hint">Quantas pessoas na família / grupo</span>
       </div>
 
-      <!-- Necessidades -->
       <div class="form-group full">
         <label for="necessidade">Necessidades</label>
         <input type="text" id="necessidade" name="necessidade"
@@ -47,7 +43,6 @@
         <span class="form-hint">Descreva o que a família mais precisa</span>
       </div>
 
-      <!-- Status (somente ao editar) -->
       {% if editando %}
       <div class="form-group full">
         <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-weight:600;">
@@ -60,7 +55,7 @@
       </div>
       {% endif %}
 
-    </div><!-- /form-grid -->
+    </div>
 
     <div style="display:flex; gap:12px; margin-top:26px;">
       <button type="submit" class="btn btn-primary">
