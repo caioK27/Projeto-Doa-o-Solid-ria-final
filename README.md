@@ -107,22 +107,6 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 Digite `S` quando perguntado e pressione Enter. Depois tente `venv\Scripts\activate` novamente.
 
-### Erro com SQLAlchemy / Python 3.14
-Se você tiver Python 3.14, substitua o conteúdo do `requirements.txt` por:
-```
-Flask==3.1.0
-Flask-SQLAlchemy==3.1.1
-Flask-Login==0.6.3
-Werkzeug==3.1.3
-SQLAlchemy==2.0.36
-Jinja2==3.1.4
-click==8.1.7
-itsdangerous==2.2.0
-MarkupSafe==2.1.5
-pytest==8.2.2
-```
-Depois rode `pip install -r requirements.txt` novamente.
-
 ### Para parar o servidor
 Pressione `Ctrl + C` no terminal.
 
